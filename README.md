@@ -1,18 +1,18 @@
 # Segmentation fault
 
-These are a collection of mistakes C programmers do that may caused an
-unexpected behavoir and introduce bugs. Regularly skim through this
-document to improve your C coding skills.
+This is a collection of mistakes C programmers do that may caused an
+unexpected behavoir and/or introduce bugs in code. Regularly skim
+through this document if you are trying to learn C.
 
 ## Read-only Memory
 
 See `src/`
 
 ```c
-char *a = "Niger!"
+char *a = "Niger!";
 
 /* Segmentation fault! */
-a[4] = '?'
+a[4] = '?';
 ```
 
 ### Why?
@@ -68,10 +68,27 @@ a = "a";
 
 ### Why?
 
-## Freeing Unallocated Memory
+## Freeing twice or Unallocated object.
 
+```
+int *a = malloc(sizeof(int));
 
-### Why?
+*a = 10;
+
+fprintf(stdout, "%p -> %d\n", a, *a);
+
+free(a);
+
+/* Can now be used by an external program! */
+fprintf(stdout, "%p -> %d\n", a, *a);
+
+/* Segmentation fault! */
+free(a);
+```
+
+```
+free(0x7fcad5b0fcc0);
+```
 
 
 
