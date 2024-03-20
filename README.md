@@ -48,7 +48,7 @@ main()
 }
 ```
 
-Want to create a copy of it? use `strdup` for example.
+Want to create a copy of the read-only memory? use `strdup` for example.
 
 ## Using Unsafe Memory
 
@@ -71,10 +71,9 @@ a = "a";
 For `a`, `*a = 'a'` causes a segmentation fault as it tries to write into an
 invalid memory location since `NULL` is basically just `0x0`.
 
-For `b`, `*b = 'b'` write `'b'` into an arbitrary memory location pointed by
-`b` and this doesn't necessarily caused a segmentation fault but leads to
-undefined results or crashes.
-
+For `b`, `*b = 'b'` writes `'b'` into an arbitrary memory location pointed
+by `b` and this doesn't necessarily report a segmentation fault but leads
+to undefined results or crashes.
 
 ## Freeing An Object Twice 
 
@@ -93,7 +92,7 @@ free(a);
 /* Invalid read as this mem was reclaimed! */
 fprintf(stdout, "%p -> %d\n", a, *a);
 
-/* Invalid write */
+/* Invalid write. */
 *a = 4;
 
 /* Segmentation fault! */
@@ -109,9 +108,33 @@ free(0x7fcad5b0fcc0);
 
 ### Why?
 
-Well, here's obvious, freeing an already reclaimed memory should caused
-an unexpected behavoir.
+Well, here's obvious, freeing an already reclaimed memory should caused an
+unexpected behavoir.
 
+## Freeing A Read-Only Memory
 
+You may have confused between read-only and heap allocated memory.
 
+```c
+char *c = "Burkina";
+char **a = malloc(sizeof(char *));
 
+if (!a) 
+  return 1;
+
+*a = c;
+
+fprintf(stdout, "%s\n", *a);
+
+/* Segmentation fault! */
+free(*a);
+
+free(a);
+
+return 0;
+```
+
+### Why?
+
+Simply because you don't have the right! This memory is managed by the
+compiler not you!!
