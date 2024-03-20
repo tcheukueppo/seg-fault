@@ -11,7 +11,11 @@ main()
 
    free(a);
 
+   /* Invalid read as this mem was reclaimed! */
    fprintf(stdout, "%p -> %d\n", a, *a);
+
+   /* Invalid write */
+   *a = 4;
 
    /* Segmentation fault! */
    free(a);
