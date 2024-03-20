@@ -68,7 +68,18 @@ a = "a";
 
 ### Why?
 
-## Freeing twice or Unallocated object.
+For `a`, `*a = 'a'` causes a segmentation fault as it tries to write into an
+invalid memory location since `NULL` is basically just `0x0`.
+
+For `b`, `*b = 'b'` write `'b'` into an arbitrary memory location pointed by
+`b` and this doesn't necessarily caused a segmentation fault but leads to
+undefined results or crashes.
+
+
+## Freeing An Object Twice 
+
+You may think of this mistake to be unlikely to happened more often but in
+reality that isn't always the case.
 
 ```
 int *a = malloc(sizeof(int));
@@ -79,16 +90,27 @@ fprintf(stdout, "%p -> %d\n", a, *a);
 
 free(a);
 
-/* Can now be used by an external program! */
+/* Invalid read as this mem was reclaimed! */
 fprintf(stdout, "%p -> %d\n", a, *a);
+
+/* Invalid write */
+*a = 4;
 
 /* Segmentation fault! */
 free(a);
 ```
 
+A bit similar to freeing an unallocated object except that this one has
+never been (re)used by the running program.
+
 ```
 free(0x7fcad5b0fcc0);
 ```
+
+### Why?
+
+Well, here's obvious, freeing an already reclaimed memory should caused
+an unexpected behavoir.
 
 
 
