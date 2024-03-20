@@ -72,15 +72,15 @@ For `a`, `*a = 'a'` causes a segmentation fault as it tries to write into an
 invalid memory location since `NULL` is basically just `0x0`.
 
 For `b`, `*b = 'b'` writes `'b'` into an arbitrary memory location pointed
-by `b` and this doesn't necessarily report a segmentation fault but leads
-to undefined results or crashes.
+by `b` and this will not necessarily report a segmentation fault but leads
+to undefined results and your program may crash.
 
 ## Freeing An Object Twice 
 
 You may think of this mistake to be unlikely to happened more often but in
 reality that isn't always the case.
 
-```
+```c
 int *a = malloc(sizeof(int));
 
 *a = 10;
@@ -102,7 +102,7 @@ free(a);
 A bit similar to freeing an unallocated object except that this one has
 never been (re)used by the running program.
 
-```
+```c
 free(0x7fcad5b0fcc0);
 ```
 
@@ -113,7 +113,7 @@ unexpected behavoir.
 
 ## Freeing A Read-Only Memory
 
-You may have confused between read-only and heap allocated memory.
+You may be confused between read-only and heap allocated memory.
 
 ```c
 char *c = "Burkina";
@@ -130,8 +130,6 @@ fprintf(stdout, "%s\n", *a);
 free(*a);
 
 free(a);
-
-return 0;
 ```
 
 ### Why?
