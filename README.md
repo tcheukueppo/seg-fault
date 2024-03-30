@@ -6,8 +6,6 @@ through this document if you are trying to learn C.
 
 ## Read-only Memory
 
-See `src/`
-
 ```c
 char *a = "Niger!";
 
@@ -134,5 +132,4 @@ free(a);
 
 ### Why?
 
-Simply because you don't have the right! This memory is managed by the
-compiler not you!!
+Simply because you don't have the right! This memory was heap allocated.
