@@ -132,4 +132,4 @@ free(a);
 
 ### Why?
 
-Simply because you don't have the right! This memory was not heap allocated.
+Simply because you don't have the right! `*a` was not heap allocated.
